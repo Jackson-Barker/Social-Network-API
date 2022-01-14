@@ -11,7 +11,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      match: [],
+      // match: [],
     },
     friends: [{ type: Schema.Types.ObjectId, ref: "Thought" }],
     //   self reference
