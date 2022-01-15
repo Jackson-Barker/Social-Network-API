@@ -11,12 +11,20 @@ const userController = {
       });
   },
 
-  getUserById: (req, res) => {
-    User.findOne({ _id: req.params.userId }).then((userdata) =>
-      !userdata
-        ? res.status(404).json({ message: "No user with that ID" })
-        : res.json(userdata)
-    );
+  getUserById: ({ params }, res) => {
+    User.findOne({ _id: params.id })
+      .populate([
+        { path: "thoughts", select: "-__v" },
+        { path: "friends", select: "-__v" },
+      ])
+      .select("-__v")
+      .then((userdata) => {
+        if (!userdata) {
+          res.status(404).json({ message: "No user with that ID" });
+          return;
+        }
+        res.json(userdata);
+      });
   },
 
   createUser({ body }, res) {
@@ -28,19 +36,29 @@ const userController = {
   updateUser({ params, body }, res) {
     User.findByIdAndUpdate(
       { _id: params.id },
-      { $set: req.body },
+      body,
       { runValidators: true, new: true }
     )
-      .then((userdata) =>
-        !userdata
-          ? res.status(404).json({ message: "No user with this id!" })
-          : res.json(userdata)
-      )
+      .then((userdata) => {
+        if (!userdata) {
+          res.status(404).json({ message: "No user with this id!" });
+          return;
+        }
+        res.json(userdata);
+      })
       .catch((err) => {
         console.log(err);
         res.status(500).json(err);
       });
   },
+
+  deleteUser({ params, body }, res) {
+    User.deleteOne(
+      { _id: params.id },
+      body
+      )
+      .then((userdata))
+  }
 };
 
 module.exports = userController;
