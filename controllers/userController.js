@@ -51,13 +51,15 @@ const userController = {
         res.status(500).json(err);
       });
   },
-
-  deleteUser({ params, body }, res) {
-    User.deleteOne(
-      { _id: params.id },
-      body
-      )
-      .then((userdata))
+  deleteUser({ params }, res) {
+    User.findOneAndDelete({_id: params.id})
+    .then((userdata) => {
+      if (!userdata) {
+        res.status(404).json({ message: "No user with this id!" });
+        return;
+      }
+      res.json(userdata)
+    })
   }
 };
 

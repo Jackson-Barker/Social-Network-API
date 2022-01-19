@@ -5,12 +5,24 @@ const thoughtController = {
     Thought.find({})
       .populate({ path: "reactions", select: "-__v" })
       .select("-__v")
-      .then((thoughtdata) => {
-        res.json(thoughtdata).catch((err) => {
-          res.status(500).json(err);
-        });
-      });
+      .then(thoughtData => 
+        res.json(thoughtData))
   },
-};
+  getThoughtById({ params }, res) {
+    Thought.findOne({_id: params.id})
+    .populate({ path: 'reactions', select: '-__v' })
+    .select('-__v')
+    .then (thoughtData => {
+      if (!thoughtData) {
+        res.status(404).json({message: 'No thought with that id'});
+        return;
+      }
+      res.json(thoughtData)
+    })
+  },
+  
+}
+
+
 
 module.export = thoughtController;
