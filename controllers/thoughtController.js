@@ -34,5 +34,55 @@ module.exports = {
       });
     });
   },
-  
+  updateThought({ params, body }, res) {
+    Thought.findByIdAndUpdate({ _id: params.id }, body, { new: true }).then(
+      (thoughtdata) => {
+        if (!thoughtdata) {
+          res.status(404).json({ message: "No thought with this id" });
+          return;
+        }
+        res.json(thoughtdata);
+      }
+    );
+  },
+  deleteThought({ params }, res) {
+    Thought.findOneAndDelete({ _id: params.id }).then((thoughtdata) => {
+      if (!thoughtdata) {
+        res.status(404).json({ message: "No thought with this id" });
+        return;
+      }
+      User.findByOneAndUpdate(
+        { username: thoughtdata.username },
+        { $pull: { thoughts: params.id } }
+      ).then(() => {
+        res.json({ message: "thought deleted" });
+      });
+    });
+  },
+  addReaction({ params, body }, res) {
+    Thought.findByIdAndUpdate(
+      { _id: params.thoughtId },
+      { $addToSet: { reactions: body } },
+      { new: true, runValidators: true }
+    ).then((thoughtdata) => {
+      if (!thoughtdata) {
+        res.status(404).json({ message: "No thought with this id" });
+        return;
+      }
+      res.json(thoughtdata);
+    });
+  },
+  deleteReaction({ params, body }, res) {
+    Thought.findOneAndUpdate(
+      { _id: params.thoughtId },
+      { $pull: { reactions: { reactionId: body.reactionId } } },
+      { new: true, runValidators: true }
+    ).then((thoughtdata) => {
+      if (!thoughtdata) {
+        res.status(404).json({ message: "No thought with this id" });
+        return;
+      }
+      res.json({ message: "reaction deleted" });
+    });
+  },
 };
