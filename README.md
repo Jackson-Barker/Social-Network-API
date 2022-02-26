@@ -15,7 +15,6 @@ SO THAT my website can handle large amounts of unstructured data.
 - [License](#license)
 - [Github Profile](#github)
 - [Email](#email)
-- [Screenshot](#screenshot)
 
 ## Installation
 
