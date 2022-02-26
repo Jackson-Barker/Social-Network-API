@@ -60,7 +60,25 @@ const userController = {
       }
       res.json(userdata)
     })
-  }
+  },
+ 
+  addFriend({ params }, res) {
+  console.log(params.userID)
+  console.log(params.friendId)
+    User.findOneAndUpdate(
+        { _id: params.userID },
+        { $addToSet: { friends: params.friendId } },
+        { new: true, runValidators: true }
+    )
+    .then(userdata => {
+        if (!userdata) {
+            res.status(404).json({ message: 'No user with this Id' });
+            return;
+        }
+        res.json(userdata)
+    })
+    .catch(err => res.json(err));
+},
 };
 
 module.exports = userController;

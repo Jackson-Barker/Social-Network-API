@@ -45,14 +45,14 @@ module.exports = {
       }
     );
   },
-  deleteThought({ params }, res) {
+  deleteThought({ params, body }, res) {
     Thought.findOneAndDelete({ _id: params.id }).then((thoughtdata) => {
       if (!thoughtdata) {
         res.status(404).json({ message: "No thought with this id" });
         return;
       }
       User.findByOneAndUpdate(
-        { username: thoughtdata.username },
+        { username: body.username },
         { $pull: { thoughts: params.id } }
       ).then(() => {
         res.json({ message: "thought deleted" });
@@ -75,7 +75,7 @@ module.exports = {
   deleteReaction({ params, body }, res) {
     Thought.findOneAndUpdate(
       { _id: params.thoughtId },
-      { $pull: { reactions: { reactionId: body.reactionId } } },
+      { $pull: { reactions: {reactionId: body.reactionId }}},
       { new: true, runValidators: true }
     ).then((thoughtdata) => {
       if (!thoughtdata) {
@@ -83,6 +83,7 @@ module.exports = {
         return;
       }
       res.json({ message: "reaction deleted" });
-    });
+    })
+    .catch(err => res.status(500).json(err));
   },
 };

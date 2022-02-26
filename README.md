@@ -1,5 +1,5 @@
 # Social Network API
- 
+
  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Description
@@ -12,7 +12,6 @@ SO THAT my website can handle large amounts of unstructured data.
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Credits](#credits)
 - [License](#license)
 - [Github Profile](#github)
 - [Email](#email)
@@ -36,18 +35,16 @@ THEN I am able to successfully create, update, and delete users and thoughts in 
 WHEN I test API POST and DELETE routes in Insomnia
 THEN I am able to successfully create and delete reactions to thoughts and add and remove friends to a user’s friend lis
 
-## Credits
-
 ## License
 
 MIT
+
 ## Github
- 
+
  <a href="https://github.com/Jackson-Barker">GitHub Profile Link</a> 
 
 ## Email
 
 <a href="mailto:barkerwjackson@gmail.com">Email</a>
 
-## Screenshot
 
